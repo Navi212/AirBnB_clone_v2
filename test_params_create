@@ -1,4 +1,4 @@
-te State name="California"
+create State name="California"
 create State name="Arizona"
 all State
 

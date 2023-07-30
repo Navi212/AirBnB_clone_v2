@@ -1,1 +1,45 @@
-{"User.93b06281-bd44-4015-bbe8-1fa0c298c691": {"id": "93b06281-bd44-4015-bbe8-1fa0c298c691", "created_at": "2018-06-14T09:45:52.369371", "updated_at": "2018-06-14T09:47:36.040444", "hello": "world", "__class__": "User"}}
+{
+    "State.a10cca3a-32ba-4219-9c48-9643a0b1de0e": {
+        "name": "California",
+        "id": "a10cca3a-32ba-4219-9c48-9643a0b1de0e",
+        "created_at": "2023-07-30T13:20:35.900417",
+        "updated_at": "2023-07-30T13:20:35.900422",
+        "__class__": "State"
+    },
+    "State.c9b2412d-d502-43a7-90f6-267fc73c7229": {
+        "name": "Arizona",
+        "id": "c9b2412d-d502-43a7-90f6-267fc73c7229",
+        "created_at": "2023-07-30T13:20:35.900427",
+        "updated_at": "2023-07-30T13:20:35.900430",
+        "__class__": "State"
+    },
+    "Place.85fdc4b8-32d5-4f0a-adf3-174598642bcf": {
+        "city_id": "0001",
+        "user_id": "0001",
+        "name": "My little house",
+        "number_rooms": 4,
+        "number_bathrooms": 2,
+        "max_guest": 10,
+        "price_by_night": 300,
+        "latitude": 37.773972,
+        "longitude": -122.431297,
+        "id": "85fdc4b8-32d5-4f0a-adf3-174598642bcf",
+        "created_at": "2023-07-30T13:20:35.900434",
+        "updated_at": "2023-07-30T13:20:35.900437",
+        "__class__": "Place"
+    },
+    "State.f9dbb341-51c8-4d60-9e0b-372b8342d686": {
+        "id": "f9dbb341-51c8-4d60-9e0b-372b8342d686",
+        "created_at": "2023-07-30T13:20:35.900442",
+        "updated_at": "2023-07-30T13:20:35.900445",
+        "name": "California",
+        "__class__": "State"
+    },
+    "State.d040be21-4462-4275-a480-69da5c891170": {
+        "id": "d040be21-4462-4275-a480-69da5c891170",
+        "created_at": "2023-07-30T13:20:35.900449",
+        "updated_at": "2023-07-30T13:20:35.900452",
+        "name": "Nevada",
+        "__class__": "State"
+    }
+}

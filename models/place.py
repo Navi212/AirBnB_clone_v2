@@ -1,83 +1,108 @@
 #!/usr/bin/python3
-"""This is the place class"""
-from sqlalchemy.ext.declarative import declarative_base
+""" Place Module for HBNB project """
+
+
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, Table, String, Integer, Float, ForeignKey
+from sqlalchemy import Column, Table, String, ForeignKey, Integer, Float
 from sqlalchemy.orm import relationship
 from os import getenv
-import models
+from models.review import Review
+from models.amenity import Amenity
 
 
-place_amenity = Table("place_amenity", Base.metadata,
+# Creates a `metadata` object that maps each Table
+# foreignkey to their respective remote tables
+metadata = Base.metadata
+
+
+# An association table for many-many relationship
+# between the `Place` and `Amenity` class or tables
+place_amenity = Table("place_amenity", metadata,
                       Column("place_id", String(60),
                              ForeignKey("places.id"),
-                             primary_key=True,
                              nullable=False),
                       Column("amenity_id", String(60),
                              ForeignKey("amenities.id"),
-                             primary_key=True,
-                             nullable=False))
+                             nullable=False)
+                      )
 
 
 class Place(BaseModel, Base):
-    """This is the class for Place
-    Attributes:
-        city_id: city id
-        user_id: user id
-        name: name input
-        description: string of description
-        number_rooms: number of room in int
-        number_bathrooms: number of bathrooms in int
-        max_guest: maximum guest in int
-        price_by_night:: pice for a staying in int
-        latitude: latitude in flaot
-        longitude: longitude in float
-        amenity_ids: list of Amenity ids
+    """
+    A place to stay
+    Class Attributes:
+    __tablename__   : Table named `places`
+    city_id         : A foreignkey to the City.id (Class/instance id)
+    user_id         : A foreignkey to the User.id (Class/instance id)
+    name            : String Input=> (Name of the place)
+    description     : String Input=> Description about the place
+    number_rooms    : Int input=> Number of rooms in the place
+    number_bathrooms: Int input=> Number of bathrooms in the place
+    max_guest       : Int input=> Maximum number of guests allowed
+    price_by_night  : Int input=> Price by night of the place
+    latitude        : Float input=> latitude of the place
+    longitude       : Float input=> longitude of the place
+    amenity_ids     : List=> list of amenity ids
     """
     __tablename__ = "places"
     city_id = Column(String(60), ForeignKey("cities.id"), nullable=False)
     user_id = Column(String(60), ForeignKey("users.id"), nullable=False)
     name = Column(String(128), nullable=False)
     description = Column(String(1024))
-    number_rooms = Column(Integer, nullable=False, default=0)
-    number_bathrooms = Column(Integer, nullable=False, default=0)
-    max_guest = Column(Integer, nullable=False, default=0)
-    price_by_night = Column(Integer, nullable=False, default=0)
+    number_rooms = Column(Integer, default=0, nullable=False)
+    number_bathrooms = Column(Integer, default=0, nullable=False)
+    max_guest = Column(Integer, default=0, nullable=False)
+    price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float)
     longitude = Column(Float)
     amenity_ids = []
 
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        reviews = relationship("Review", cascade='all, delete, delete-orphan',
+    # For DB storage
+    if (getenv("HBNB_TYPE_STORAGE") == "db"):
+        reviews = relationship("Review",
+                               cascade="all, delete, delete-orphan",
                                backref="place")
-
-        amenities = relationship("Amenity", secondary=place_amenity,
+        amenities = relationship("Amenity",
+                                 secondary="place_amenity",
                                  viewonly=False,
                                  back_populates="place_amenities")
+
+    # For FileStorage
     else:
         @property
         def reviews(self):
-            """ Returns list of reviews.id """
-            var = models.storage.all()
-            lista = []
-            result = []
-            for key in var:
-                review = key.replace('.', ' ')
-                review = shlex.split(review)
-                if (review[0] == 'Review'):
-                    lista.append(var[key])
-            for elem in lista:
-                if (elem.place_id == self.id):
-                    result.append(elem)
-            return (result)
+            """
+            Returns the list of Review instances with
+            place_id equals to the current Place.id
+            """
+            from models import storage
+            review_li = []
+            review_objs = storage.all(Review).values()
+            for obj in review_objs:
+                if obj.place_id == self.id:
+                    review_li.append(obj)
+            return (review_li)
 
         @property
         def amenities(self):
-            """ Returns list of amenity ids """
-            return self.amenity_ids
+            """
+            Returns the list of Amenity instances based on the
+            attribute amenity_ids that contains all
+            Amenity.id linked to the Place
+            """
+            from models import storage
+            amenity_li = []
+            amenity_objs = storage.all(Amenity).values()
+            for obj in amenity_objs:
+                if Amenity.id in Place.amenity_ids:
+                    amenity_li.append(obj)
+            return (amenity_li)
 
         @amenities.setter
-        def amenities(self, obj=None):
-            """ Appends amenity ids to the attribute """
-            if type(obj) is Amenity and obj.id not in self.amenity_ids:
-                self.amenity_ids.append(obj.id)
+        def amenities(self, value):
+            """
+            Handles append method for adding an Amenity.id to
+            the attribute amenity_ids
+            """
+            if (type(value) == Amenity):
+                Place.amenity_ids.append(value.id)
