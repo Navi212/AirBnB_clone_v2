@@ -1,14 +1,12 @@
 #!/usr/bin/python3
 """ """
 
+
+import unittest
 from models import base_model
 from models.base_model import BaseModel
-from models import storage
 import unittest
 import datetime
-from uuid import UUID
-import json
-import os
 import pep8
 
 
@@ -26,10 +24,7 @@ class test_basemodel(unittest.TestCase):
         pass
 
     def tearDown(self):
-        try:
-            os.remove('file.json')
-        except FileNotFoundError:
-            pass
+        del self.value
 
     def test_pep8(self):
         """Tests pep8 conformance"""

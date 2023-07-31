@@ -2,14 +2,14 @@
 """The `test_amenity` module supplies a test class `test_Amenity`"""
 
 
+import unittest
 from models import amenity
 from models.base_model import Base
-from tests.test_models.test_base_model import test_basemodel
 from models.amenity import Amenity
 import pep8
 
 
-class test_Amenity(test_basemodel):
+class test_Amenity(unittest.TestCase):
     """
     Defines a `test_Amenity` test class that tests
     class attributes and methods
@@ -45,3 +45,12 @@ class test_Amenity(test_basemodel):
     def test_class_inherits_from_base(self):
         """Tests Amenity also inherits from `Base` declarative_base"""
         self.assertTrue(issubclass(type(self.class_name), Base))
+
+    def test_table_name(self):
+        """Tests table name is `amenities`"""
+        self.assertEqual(self.class_name.__tablename__, "amenities")
+
+    def test_attribute_type(self):
+        """Test attributes Type"""
+        self.assertTrue(type(self.class_name.name), str)
+        self.assertTrue(type(self.class_name.__tablename__), str)
