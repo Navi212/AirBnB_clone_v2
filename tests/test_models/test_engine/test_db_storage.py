@@ -92,7 +92,7 @@ class Test_db_storage(unittest.TestCase):
         del self.state_obj
         del self.all_obj
 
-    # @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != "db", "No DB")
+    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != "db", "No DB")
     def test_pep8(self):
         """Tests pep8 conformance"""
         style = pep8.StyleGuide(quiet=True)
