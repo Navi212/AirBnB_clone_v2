@@ -1,71 +1,147 @@
 #!/usr/bin/python3
-"""test for BaseModel"""
+""" """
+
+
 import unittest
-import os
-from os import getenv
+from models import base_model
 from models.base_model import BaseModel
+import unittest
+import datetime
 import pep8
 
 
-class TestBaseModel(unittest.TestCase):
-    """this will test the base model class"""
+class test_basemodel(unittest.TestCase):
+    """Defines a test class for `BaseModel` attributes and methods"""
 
-    @classmethod
-    def setUpClass(cls):
-        """setup for the test"""
-        cls.base = BaseModel()
-        cls.base.name = "Kev"
-        cls.base.num = 20
+    def __init__(self, *args, **kwargs):
+        """Calls the init method of the `BaseModel` class"""
+        super().__init__(*args, **kwargs)
+        self.name = 'BaseModel'
+        self.value = BaseModel
 
-    @classmethod
-    def teardown(cls):
-        """at the end of the test this will tear it down"""
-        del cls.base
+    def setUp(self):
+        """Defines an empty setup method"""
+        pass
 
     def tearDown(self):
-        """teardown"""
-        try:
-            os.remove("file.json")
-        except Exception:
-            pass
+        del self.value
 
-    def test_pep8_BaseModel(self):
-        """Testing for pep8"""
+    def test_pep8(self):
+        """Tests pep8 conformance"""
         style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/base_model.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        pep = style.check_files(["models/base_model.py"])
+        self.assertEqual(pep.total_errors, 0, "Fix PEP8: Error")
 
-    def test_checking_for_docstring_BaseModel(self):
-        """checking for docstrings"""
+    def test_module_documentation(self):
+        """Tests module documentation"""
+        self.assertIsNotNone(base_model.__doc__)
+
+    def test_class_documentation(self):
+        """Tests module documentation"""
         self.assertIsNotNone(BaseModel.__doc__)
-        self.assertIsNotNone(BaseModel.__init__.__doc__)
-        self.assertIsNotNone(BaseModel.__str__.__doc__)
-        self.assertIsNotNone(BaseModel.save.__doc__)
-        self.assertIsNotNone(BaseModel.to_dict.__doc__)
 
-    def test_method_BaseModel(self):
-        """chekcing if Basemodel have methods"""
-        self.assertTrue(hasattr(BaseModel, "__init__"))
-        self.assertTrue(hasattr(BaseModel, "save"))
-        self.assertTrue(hasattr(BaseModel, "to_dict"))
+    def test_class_method_documentation(self):
+        """Tests documentations for class methods"""
+        self.assertIsNotNone(self.value.__str__.__doc__)
+        self.assertIsNotNone(self.value.save.__doc__)
+        self.assertIsNotNone(self.value.to_dict.__doc__)
+        self.assertIsNotNone(self.value.delete.__doc__)
 
-    def test_init_BaseModel(self):
-        """test if the base is an type BaseModel"""
-        self.assertTrue(isinstance(self.base, BaseModel))
+    def test_class_attributes(self):
+        """Tests presence of class attributes"""
+        self.assertTrue(hasattr(self.value, "__init__"))
+        self.assertTrue(hasattr(self.value, "__str__"))
+        self.assertTrue(hasattr(self.value, "save"))
+        self.assertTrue(hasattr(self.value, "to_dict"))
+        self.assertTrue(hasattr(self.value, "delete"))
 
-    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'db', 'DB')
-    def test_save_BaesModel(self):
-        """test if the save works"""
-        self.base.save()
-        self.assertNotEqual(self.base.created_at, self.base.updated_at)
+    def test_default(self):
+        """Tests object of `BaseModel` is Type `BaseModel`"""
+        i = self.value()
+        self.assertEqual(type(i), BaseModel)
 
-    def test_to_dict_BaseModel(self):
-        """test if dictionary works"""
-        base_dict = self.base.to_dict()
-        self.assertEqual(self.base.__class__.__name__, 'BaseModel')
-        self.assertIsInstance(base_dict['created_at'], str)
-        self.assertIsInstance(base_dict['updated_at'], str)
+    def test_kwargs(self):
+        """Tests obj is not dict"""
+        i = self.value()
+        copy = i.to_dict()
+        new = BaseModel(**copy)
+        self.assertFalse(new is i)
 
+    def test_kwargs_int(self):
+        """Tests dicts can not contain non-strings as keys"""
+        i = self.value()
+        copy = i.to_dict()
+        copy.update({1: 2})
+        with self.assertRaises(TypeError):
+            new = BaseModel(**copy)
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_str(self):
+        """Tests the instance method __str__ return value is same"""
+        i = self.value()
+        self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
+                         i.__dict__))
+
+    def test_todict(self):
+        """Tests difference in created_at/updated_at time"""
+        i = self.value()
+        n = i.to_dict()
+        self.assertNotEqual(i.to_dict(), n)
+
+    def test_kwargs_none(self):
+        """Tests dict can not have None type as key/value"""
+        n = {None: None}
+        with self.assertRaises(TypeError):
+            new = self.value(**n)
+
+    def test_kwargs_one(self):
+        """Tests key in object dict"""
+        n = {'Name': 'test'}
+        new = BaseModel(**n)
+        self.assertIn("Name", new.__dict__)
+
+    def test_kwargs_invalid_key(self):
+        """Tests for invalid key in object dict"""
+        n = {'Name': 'test'}
+        new = BaseModel(**n)
+        self.assertNotIn("Nam", new.__dict__)
+
+    def test_id_in_obj(self):
+        """Tests obj id is string"""
+        new = self.value()
+        self.assertEqual(type(new.id), str)
+
+    def test_id_created_updated_at(self):
+        """Tests created_at in all objects created"""
+        new = self.value()
+        self.assertIn("created_at", new.__dict__)
+        self.assertIn("updated_at", new.__dict__)
+        self.assertIn("id", new.__dict__)
+
+    def test_created_at(self):
+        """Tests created_at are datetime objects"""
+        new = self.value()
+        self.assertEqual(type(new.created_at), datetime.datetime)
+
+    def test_updated_at(self):
+        """Tests updated_at are datetime objects"""
+        new = self.value()
+        self.assertEqual(type(new.updated_at), datetime.datetime)
+        n = new.to_dict()
+        new = BaseModel(**n)
+        self.assertFalse(new.created_at == new.updated_at)
+
+    def test_delete(self):
+        """Tests delete method on an instance"""
+        new = self.value()
+        new.delete()
+        self.assertNotIn(new, self.value.__dict__)
+
+    def test_save_method(self):
+        """
+        Tests updated_at of save method and updated_at during
+        intantiation are not equal
+        """
+        new_1 = self.value()
+        new_1.save()
+        new_2 = self.value()
+        self.assertNotEqual(new_1.updated_at, new_2.updated_at)

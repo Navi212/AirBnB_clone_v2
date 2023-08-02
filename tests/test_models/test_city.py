@@ -1,71 +1,81 @@
 #!/usr/bin/python3
-"""test for city"""
+"""The `test_city` module supplies a test class `test_City`"""
+
+
 import unittest
-import os
-from os import getenv
+from models import city
+from models.base_model import BaseModel, Base
 from models.city import City
-from models.base_model import BaseModel
+from datetime import datetime
 import pep8
 
 
-class TestCity(unittest.TestCase):
-    """this will test the city class"""
-
+class test_City(unittest.TestCase):
+    """
+    Defines a `test_City` test class that tests
+    class attributes and methods
+    """
     @classmethod
     def setUpClass(cls):
-        """set up for test"""
-        cls.city = City()
-        cls.city.name = "LA"
-        cls.city.state_id = "CA"
+        cls.city_obj = City()
 
     @classmethod
-    def teardown(cls):
-        """at the end of the test this will tear it down"""
-        del cls.city
+    def tearDownClass(cls):
+        del cls.city_obj
 
-    def tearDown(self):
-        """teardown"""
-        try:
-            os.remove("file.json")
-        except Exception:
-            pass
-
-    def test_pep8_City(self):
-        """Tests pep8 style"""
+    def test_pep8(self):
+        """Tests pep8 conformance"""
         style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/city.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        pep = style.check_files(["models/city.py"])
+        self.assertEqual(pep.total_errors, 0, "Fix PEP8: Error")
 
-    def test_checking_for_docstring_City(self):
-        """checking for docstrings"""
+    def test_class_documentation(self):
+        """Tests class documentation"""
+        self.assertIsNotNone(city.__doc__)
+
+    def test_module_documentation(self):
+        """Tests module documentation"""
         self.assertIsNotNone(City.__doc__)
 
-    def test_attributes_City(self):
-        """chekcing if City have attributes"""
-        self.assertTrue('id' in self.city.__dict__)
-        self.assertTrue('created_at' in self.city.__dict__)
-        self.assertTrue('updated_at' in self.city.__dict__)
-        self.assertTrue('state_id' in self.city.__dict__)
-        self.assertTrue('name' in self.city.__dict__)
+    def test_class_attributes(self):
+        """Tests presence of class attributes"""
+        self.assertTrue("__tablename__" in type(self.city_obj).__dict__)
+        self.assertTrue("name" in type(self.city_obj).__dict__)
+        self.assertTrue("state_id" in type(self.city_obj).__dict__)
+        self.assertTrue("places" in type(self.city_obj).__dict__)
 
-    def test_is_subclass_City(self):
-        """test if City is subclass of Basemodel"""
-        self.assertTrue(issubclass(self.city.__class__, BaseModel), True)
+    def test_class_inherits_from_BaseModel(self):
+        """Tests `City` inherits from `BaseModel`"""
+        self.assertTrue(issubclass(type(self.city_obj), BaseModel))
 
-    def test_attribute_types_City(self):
-        """test attribute type for City"""
-        self.assertEqual(type(self.city.name), str)
-        self.assertEqual(type(self.city.state_id), str)
+    def test_class_inherits_from_base(self):
+        """Tests `City` also inherits from `Base` declarative_base"""
+        self.assertTrue(issubclass(type(self.city_obj), Base))
 
-    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'db', 'DB')
-    def test_save_City(self):
-        """test if the save works"""
-        self.city.save()
-        self.assertNotEqual(self.city.created_at, self.city.updated_at)
+    def test_table_name(self):
+        """Tests table name is `cities`"""
+        self.assertEqual(self.city_obj.__tablename__, "cities")
 
-    def test_to_dict_City(self):
-        """test if dictionary works"""
-        self.assertEqual('to_dict' in dir(self.city), True)
+    def test_attribute_type(self):
+        """Test attributes Type"""
+        self.assertTrue(type(self.city_obj.__tablename__), str)
+        self.assertTrue(type(self.city_obj.name), str)
+        self.assertTrue(type(self.city_obj.state_id), str)
+
+    def test_id_created_updated(self):
+        """
+        Tests presence of id, created_at and updated_at
+        on `Place` objects
+        """
+        self.assertTrue("id" in self.city_obj.__dict__)
+        self.assertTrue("created_at" in self.city_obj.__dict__)
+        self.assertTrue("updated_at" in self.city_obj.__dict__)
+
+    def test_type_id_created_updated(self):
+        """Tests Types of id, created_at and updated_at"""
+        self.assertTrue(type(self.city_obj.id) is str)
+        self.assertTrue(type(self.city_obj.created_at) is datetime)
+        self.assertTrue(type(self.city_obj.updated_at) is datetime)
 
 
 if __name__ == "__main__":

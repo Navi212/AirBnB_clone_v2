@@ -1,74 +1,82 @@
 #!/usr/bin/python3
-"""test for review"""
+"""The `test_review` module supplies a test class `test_Review`"""
+
+
 import unittest
-import os
-from os import getenv
+from models import review
+from models.base_model import BaseModel, Base
 from models.review import Review
-from models.base_model import BaseModel
+from datetime import datetime
 import pep8
 
 
-class TestReview(unittest.TestCase):
-    """this will test the place class"""
-
+class test_Review(unittest.TestCase):
+    """
+    Defines a `test_Review` test class that tests
+    class attributes and methods
+    """
     @classmethod
     def setUpClass(cls):
-        """set up for test"""
-        cls.rev = Review()
-        cls.rev.place_id = "4321-dcba"
-        cls.rev.user_id = "123-bca"
-        cls.rev.text = "The srongest in the Galaxy"
+        cls.review_obj = Review()
 
     @classmethod
-    def teardown(cls):
-        """at the end of the test this will tear it down"""
-        del cls.rev
+    def tearDownClass(cls):
+        del cls.review_obj
 
-    def tearDown(self):
-        """teardown"""
-        try:
-            os.remove("file.json")
-        except Exception:
-            pass
-
-    def test_pep8_Review(self):
-        """Tests pep8 style"""
+    def test_pep8(self):
+        """Tests pep8 conformance"""
         style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/review.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        pep = style.check_files(["models/review.py"])
+        self.assertEqual(pep.total_errors, 0, "Fix PEP8: Error")
 
-    def test_checking_for_docstring_Review(self):
-        """checking for docstrings"""
+    def test_class_documentation(self):
+        """Tests class documentation"""
+        self.assertIsNotNone(review.__doc__)
+
+    def test_module_documentation(self):
+        """Tests module documentation"""
         self.assertIsNotNone(Review.__doc__)
 
-    def test_attributes_review(self):
-        """chekcing if review have attributes"""
-        self.assertTrue('id' in self.rev.__dict__)
-        self.assertTrue('created_at' in self.rev.__dict__)
-        self.assertTrue('updated_at' in self.rev.__dict__)
-        self.assertTrue('place_id' in self.rev.__dict__)
-        self.assertTrue('text' in self.rev.__dict__)
-        self.assertTrue('user_id' in self.rev.__dict__)
+    def test_class_attributes(self):
+        """Tests presence of class attributes"""
+        self.assertTrue("__tablename__" in type(self.review_obj).__dict__)
+        self.assertTrue("text" in type(self.review_obj).__dict__)
+        self.assertTrue("place_id" in type(self.review_obj).__dict__)
+        self.assertTrue("user_id" in type(self.review_obj).__dict__)
 
-    def test_is_subclass_Review(self):
-        """test if review is subclass of BaseModel"""
-        self.assertTrue(issubclass(self.rev.__class__, BaseModel), True)
+    def test_class_inherits_from_BaseModel(self):
+        """Tests `Review` inherits from `BaseModel`"""
+        self.assertTrue(issubclass(type(self.review_obj), BaseModel))
 
-    def test_attribute_types_Review(self):
-        """test attribute type for Review"""
-        self.assertEqual(type(self.rev.text), str)
-        self.assertEqual(type(self.rev.place_id), str)
-        self.assertEqual(type(self.rev.user_id), str)
+    def test_class_inherits_from_base(self):
+        """Tests `Review` also inherits from `Base` declarative_base"""
+        self.assertTrue(issubclass(type(self.review_obj), Base))
 
-    @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") == 'db', 'DB')
-    def test_save_Review(self):
-        """test if the save works"""
-        self.rev.save()
-        self.assertNotEqual(self.rev.created_at, self.rev.updated_at)
+    def test_table_name(self):
+        """Tests table name is `reviews`"""
+        self.assertEqual(self.review_obj.__tablename__, "reviews")
 
-    def test_to_dict_Review(self):
-        """test if dictionary works"""
-        self.assertEqual('to_dict' in dir(self.rev), True)
+    def test_attribute_type(self):
+        """Test attributes Type"""
+        self.assertTrue(type(self.review_obj.__tablename__), str)
+        self.assertTrue(type(self.review_obj.text), str)
+        self.assertTrue(type(self.review_obj.place_id), str)
+        self.assertTrue(type(self.review_obj.user_id), str)
+
+    def test_id_created_updated(self):
+        """
+        Tests presence of id, created_at and updated_at
+        on `Review` objects
+        """
+        self.assertTrue("id" in self.review_obj.__dict__)
+        self.assertTrue("created_at" in self.review_obj.__dict__)
+        self.assertTrue("updated_at" in self.review_obj.__dict__)
+
+    def test_type_id_created_updated(self):
+        """Tests Types of id, created_at and updated_at"""
+        self.assertTrue(type(self.review_obj.id) is str)
+        self.assertTrue(type(self.review_obj.created_at) is datetime)
+        self.assertTrue(type(self.review_obj.updated_at) is datetime)
 
 
 if __name__ == "__main__":

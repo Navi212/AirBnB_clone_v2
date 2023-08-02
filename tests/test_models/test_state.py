@@ -1,66 +1,74 @@
 #!/usr/bin/python3
-"""test for state"""
+"""
+The `test_state` module supplies a test class
+`test_State` that tests class attributes, methods,
+documentations and pep8 conformance
+"""
+
+
 import unittest
-import os
-from models.state import State
-from models.base_model import BaseModel
 import pep8
+from models.base_model import BaseModel, Base
+from models.state import State
+from models import state
+from datetime import datetime
 
 
-class TestState(unittest.TestCase):
-    """this will test the State class"""
-
+class test_State(unittest.TestCase):
+    """
+    Defines a `test_State` test class that tests
+    class attributes and methods
+    """
     @classmethod
     def setUpClass(cls):
-        """set up for test"""
-        cls.state = State()
-        cls.state.name = "CA"
+        cls.state_obj = State()
 
     @classmethod
-    def teardown(cls):
-        """at the end of the test this will tear it down"""
-        del cls.state
+    def tearDownClass(cls):
+        del cls.state_obj
 
-    def tearDown(self):
-        """teardown"""
-        try:
-            os.remove("file.json")
-        except Exception:
-            pass
-
-    def test_pep8_Review(self):
-        """Tests pep8 style"""
+    def test_pep8(self):
+        """Tests pep8 conformance"""
         style = pep8.StyleGuide(quiet=True)
-        p = style.check_files(['models/state.py'])
-        self.assertEqual(p.total_errors, 0, "fix pep8")
+        pep = style.check_files(["models/state.py"])
+        self.assertEqual(pep.total_errors, 0, "Fix PEP8: Error")
 
-    def test_checking_for_docstring_State(self):
-        """checking for docstrings"""
+    def test_class_documentation(self):
+        """Tests class documentation"""
+        self.assertIsNotNone(state.__doc__)
+
+    def test_module_documentation(self):
+        """Tests module documentation"""
         self.assertIsNotNone(State.__doc__)
 
-    def test_attributes_State(self):
-        """chekcing if State have attributes"""
-        self.assertTrue('id' in self.state.__dict__)
-        self.assertTrue('created_at' in self.state.__dict__)
-        self.assertTrue('updated_at' in self.state.__dict__)
-        self.assertTrue('name' in self.state.__dict__)
+    def test_class_inherits_from_BaseModel(self):
+        """Tests `Place` inherits from `BaseModel`"""
+        self.assertTrue(issubclass(type(self.state_obj), BaseModel))
+    
+    def test_class_inherits_from_BaseModel(self):
+        """Tests `Place` also inherits from `Base` declarative_base"""
+        self.assertTrue(issubclass(type(self.state_obj), Base))
 
-    def test_is_subclass_State(self):
-        """test if State is subclass of BaseModel"""
-        self.assertTrue(issubclass(self.state.__class__, BaseModel), True)
+    def test_class_attributes(self):
+        """Tests presence of class attributes"""
+        self.assertTrue("__tablename__" in type(self.state_obj).__dict__)
+        self.assertTrue("name" in type(self.state_obj).__dict__)
+        self.assertTrue("cities" in type(self.state_obj).__dict__)
 
-    def test_attribute_types_State(self):
-        """test attribute type for State"""
-        self.assertEqual(type(self.state.name), str)
-
-    def test_save_State(self):
-        """test if the save works"""
-        self.state.save()
-        self.assertNotEqual(self.state.created_at, self.state.updated_at)
-
-    def test_to_dict_State(self):
-        """test if dictionary works"""
-        self.assertEqual('to_dict' in dir(self.state), True)
+    def test_id_created_updated(self):
+        """
+        Tests presence of id, created_at and updated_at
+        on `Place` objects
+        """
+        self.assertTrue("id" in self.state_obj.__dict__)
+        self.assertTrue("created_at" in self.state_obj.__dict__)
+        self.assertTrue("updated_at" in self.state_obj.__dict__)
+    
+    def test_type_id_created_updated(self):
+        """Tests Types of id, created_at and updated_at"""
+        self.assertTrue(type(self.state_obj.id) is str)
+        self.assertTrue(type(self.state_obj.created_at) is datetime)
+        self.assertTrue(type(self.state_obj.updated_at) is datetime)
 
 
 if __name__ == "__main__":
