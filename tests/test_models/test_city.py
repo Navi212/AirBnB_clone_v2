@@ -65,7 +65,7 @@ class test_City(unittest.TestCase):
     def test_id_created_updated(self):
         """
         Tests presence of id, created_at and updated_at
-        on `Place` objects
+        on `City` objects
         """
         self.assertTrue("id" in self.city_obj.__dict__)
         self.assertTrue("created_at" in self.city_obj.__dict__)
