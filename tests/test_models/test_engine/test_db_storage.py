@@ -170,9 +170,9 @@ class Test_db_storage(unittest.TestCase):
         self.assertEqual(len(result), 1)
         query_obj.close()
         query_obj = db.cursor()
-        query_obj.execute("SELECT * FROM cities WHERE name = 'cities'")
+        query_obj.execute("SELECT * FROM cities WHERE name = 'Ikeja'")
         result = query_obj.fetchall()
-        self.assertEqual(len(result), 0)
+        self.assertEqual(len(result), 1)
         query_obj.close()
 
     @unittest.skipIf(getenv("HBNB_TYPE_STORAGE") != "db", "No DB")
