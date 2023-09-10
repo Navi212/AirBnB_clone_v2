@@ -5,7 +5,6 @@ a .tgz archive from the contents of the web_static folder of our AirBnB Clone v2
 """
 
 
-from __future__ import with_statement
 from fabric.api import *
 from datetime import datetime
 from os import path
@@ -25,12 +24,11 @@ def do_pack():
         The function do_pack must return the archive path if the archive has
             been correctly generated. Otherwise, it should return None
     """
-    with settings(warn_only=True):
-        if local("mkdir -p versions", capture=True).failed:
-            return None
-        time_fm = datetime.now().strftime("%Y%m%d%H%M%S")
-        file_name = f"web_static_{time_fm}.tgz"
-        dest_folder = f"versions/{file_name}"
-        if local(f"tar -cvzf {dest_folder} web_static", capture=True).failed:
-            return None
-        return file_name
+    if local("mkdir -p versions").failed:
+        return None
+    time_fm = datetime.now().strftime("%Y%m%d%H%M%S")
+    file_name = f"web_static_{time_fm}.tgz"
+    dest_folder = f"versions/{file_name}"
+    if local(f"tar -cvzf {dest_folder} web_static").failed:
+        return None
+    return file_name
