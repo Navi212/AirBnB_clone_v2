@@ -1,5 +1,9 @@
 #!/usr/bin/python3
-""" """
+"""
+The `test_base_model` module supplies a test class
+`test_basemodel that tests class atributes, methods,
+documentations and pep8 conformance
+"""
 
 
 import unittest
@@ -145,3 +149,6 @@ class test_basemodel(unittest.TestCase):
         new_1.save()
         new_2 = self.value()
         self.assertNotEqual(new_1.updated_at, new_2.updated_at)
+
+if __name__ == "__main__":
+    unittest.main()
