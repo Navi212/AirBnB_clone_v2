@@ -59,25 +59,19 @@ def do_deploy(archive_path):
     """
     if not os.path.exists(archive_path):
         return False
-    file_name_tgz = archive_path.split("/")[-1]
-    file_name = file_name_tgz.split(".")[0]
-
-    if put(f"versions/{file_name_tgz}", "/tmp/").failed:
+    try:
+        filename = archive_path.split("/")[-1]
+        no_ext = filename.split(".")[0]
+        path_no_ext = "/data/web_static/releases/{}/".format(no_ext)
+        symlink = "/data/web_static/current"
+        put(archive_path, "/tmp/")
+        run("mkdir -p {}".format(path_no_ext))
+        run("tar -xzf /tmp/{} -C {}".format(filename, path_no_ext))
+        run("rm /tmp/{}".format(filename))
+        run("mv {}web_static/* {}".format(path_no_ext, path_no_ext))
+        run("rm -rf {}web_static".format(path_no_ext))
+        run("rm -rf {}".format(symlink))
+        run("ln -s {} {}".format(path_no_ext, symlink))
+        return True
+    except:
         return False
-    if run(f"mkdir -p /data/web_static/releases/{file_name}/").failed:
-        return False
-    if run(f"rm -rf /data/web_static/releases/{file_name}/").failed:
-        return False
-    if run(f"tar -xvzf /tmp/{file_name_tgz} -C /data/web_static/releases/{file_name}/").failed:
-        return False
-    if run(f"mv -f /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}/").failed:
-        return False
-    if run(f"rm -rf /tmp/{file_name_tgz}").failed:
-        return False
-    if run(f"rm -rf /data/web_static/releases/{file_name}/web_static").failed:
-        return False
-    if run("rm -rf /data/web_static/current").failed:
-        return False
-    if run("ln -s /data/web_static/releases/{file_name} /data/web_static/current").failed:
-        return False
-    return True
