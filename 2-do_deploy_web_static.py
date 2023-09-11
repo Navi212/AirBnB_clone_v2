@@ -5,7 +5,6 @@ and distributes an archive to our web servers based on `1-pack_web_static` modul
 """
 
 
-from __future__ import with_statement
 from fabric.api import *
 from datetime import datetime
 import os
@@ -29,15 +28,14 @@ def do_pack():
         The function do_pack must return the archive path if the archive has
             been correctly generated. Otherwise, it should return None
     """
-    with settings(warn_only=True):
-        if local("mkdir -p versions", capture=True).failed:
-            return None
-        time_fm = datetime.now().strftime("%Y%m%d%H%M%S")
-        file_name = f"web_static_{time_fm}.tgz"
-        dest_folder = f"versions/{file_name}"
-        if local(f"tar -cvzf {dest_folder} web_static", capture=True).failed:
-            return None
-        return file_name
+   if local("mkdir -p versions").failed:
+        return None
+    time_fm = datetime.now().strftime("%Y%m%d%H%M%S")
+    file_name = f"web_static_{time_fm}.tgz"
+    dest_folder = f"versions/{file_name}"
+    if local(f"tar -cvzf {dest_folder} web_static").failed:
+        return None
+    return file_name
 
 
 @task
@@ -70,14 +68,12 @@ def do_deploy(archive_path):
         return False
     if run(f"tar -xvzf /tmp/{file_name_tgz} -C /data/web_static/releases/{file_name}").failed:
         return False
-    if run(f"mv -f /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}").failed:
+    if run(f"mv /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}").failed:
         return False
     if run(f"rm -f /tmp/{file_name_tgz}").failed:
         return False
     if run(f"rm -rf /data/web_static/releases/{file_name}/web_static").failed:
         return False
-    if run("rm /data/web_static/current").failed:
-        return False
-    if run("ln -s /data/web_static/releases/{file_name} /data/web_static/current").failed:
+    if run("ln -s -f /data/web_static/releases/{file_name} /data/web_static/current").failed:
         return False
     return True
