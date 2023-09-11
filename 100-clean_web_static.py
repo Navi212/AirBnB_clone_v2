@@ -13,6 +13,7 @@ env.user = "ubuntu"
 env.hosts = ['52.86.24.88', '100.26.20.84']
 
 
+@task
 def do_clean(number=0):
     """
     Delete out-of-date archives.
