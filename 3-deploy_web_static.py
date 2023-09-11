@@ -5,7 +5,7 @@ distributes an archive to web servers based on `2-do_deploy_web_static` module
 """
 
 
-from __future__ import with_statement
+#from __future__ import with_statement
 from fabric.api import *
 from datetime import datetime
 from os import path
@@ -25,10 +25,9 @@ def deploy():
     Call the do_deploy(archive_path) function, using the new path of the new archive
     Return the return value of do_deploy
     """
-   with settings(warn_only=True):
-        ret_path = execute(do_pack, capture=True)
-        if ret_path is None or ret_path.failed:
-            return False
-        ret_val = execute(do_deploy, capture=True)
-        if ret_val.succeeded:
-            return ret_val
+    ret_path = do_pack()
+    if ret_path is None or ret_path.failed:
+        return False
+    ret_val = (do_deploy(ret_path)
+    if ret_val.succeeded:
+        return ret_val
