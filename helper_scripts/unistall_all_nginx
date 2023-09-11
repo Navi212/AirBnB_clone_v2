@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+#Make sure to run both commands for full removall of nginx
+
+#This will uninstall and remove packages
+sudo apt-get purge nginx nginx-common nginx-full nginx-light
+
+#This will remove the pending files
+sudo apt-get autoremove
+

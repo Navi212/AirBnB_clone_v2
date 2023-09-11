@@ -1,0 +1,11 @@
+Hint:
+
+To make the web serve final index file on visit to https://www.codershub.tech/hbnb_static/
+just create index.html in the specific dir /data/web_static/releases/web_static_20230911113630
+on both the webservers
+
+https://www.codershub.tech/hbnb_static/103-index.html
+
+To check load distribution for HAProxy
+command:
+curl -Is "https://www.codershub.tech"
