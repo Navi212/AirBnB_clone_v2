@@ -4,7 +4,7 @@ The `2-do_deploy_web_static` module supplies a function `do_deploy` that creates
 and distributes an archive to our web servers based on `1-pack_web_static` module
 """
 
-from __future__ import with_statement
+
 from fabric.api import *
 from datetime import datetime
 import os
@@ -59,13 +59,29 @@ def do_deploy(archive_path):
     """
     if not path.exists(archive_path):
         return False
-    with settings(warn_only=True):
-        if put("archive_path", "/tmp/", capture=True).failed:
-            return False
-        file_name = f"web_static_{time_fm}"
-        if run(f"tar -xvzf archive_path -C /data/web_static/releases/{file_name}", capture=True).failed:
-            return False
-        run("rm -f /tmp/archive_path")
-        if run("ln -sf /data/web_static/releases/{file_name} /data/web_static/current", capture=True).failed:
-            return False
-        return True
+    symlink = "/data/web_static/current"
+    file_name = archive_path.split("/")[-1]
+    file_dir = file_name.split(".")[0]
+    dir_path = "/data/web_static/releases"
+
+    if put(f"{archive_path}", "/tmp/").failed:
+        return False
+    if run(f"mkdir -p {dir_path}/{file_dir}").failed:
+        return False
+    if run(f"tar -xvzf /tmp/{file_name} -C {dir_path}/{file_dir}").failed:
+        return False
+    if run(f"mv {dir_path}/{file_dir}/web_static/* {dir_path}/{file_dir}").failed:
+        return False
+    if run(f"ln -sf {dir_path}/{file_dir} {symlink}").failed:
+        return False
+    return True
+
+
+
+
+
+
+
+
+
+
