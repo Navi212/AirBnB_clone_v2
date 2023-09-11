@@ -68,12 +68,14 @@ def do_deploy(archive_path):
         return False
     if run(f"tar -xvzf /tmp/{file_name_tgz} -C /data/web_static/releases/{file_name}").failed:
         return False
-    if run(f"mv /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}").failed:
+    if run(f"mv -f /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}").failed:
         return False
     if run(f"rm -f /tmp/{file_name_tgz}").failed:
         return False
     if run(f"rm -rf /data/web_static/releases/{file_name}/web_static").failed:
         return False
-    if run("ln -s -f /data/web_static/releases/{file_name} /data/web_static/current").failed:
+    if run("rm -f /data/web_static/current").failed:
+        return False
+    if run("ln -s /data/web_static/releases/{file_name} /data/web_static/current").failed:
         return False
     return True
