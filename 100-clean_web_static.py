@@ -6,7 +6,7 @@ on our webservers based on `3-deploy_web_static` module
 """
 
 
-from fabric.api import *
+from fabric.api import task, local, run
 
 
 env.user = "ubuntu"
