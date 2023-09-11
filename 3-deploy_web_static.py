@@ -25,7 +25,10 @@ def deploy():
     Call the do_deploy(archive_path) function, using the new path of the new archive
     Return the return value of do_deploy
     """
-   file = do_pack()
-    if file is None:
-        return False
-    return do_deploy(file)
+   with settings(warn_only=True):
+        ret_path = execute(do_pack, capture=True)
+        if ret_path is None or ret_path.failed:
+            return False
+        ret_val = execute(do_deploy, capture=True)
+        if ret_val.succeeded:
+            return ret_val
