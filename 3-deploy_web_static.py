@@ -5,7 +5,7 @@ distributes an archive to web servers based on `2-do_deploy_web_static` module
 """
 
 
-#from __future__ import with_statement
+from __future__ import with_statement
 from fabric.api import *
 from datetime import datetime
 from os import path
