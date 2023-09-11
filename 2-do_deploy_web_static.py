@@ -72,8 +72,8 @@ def do_deploy(archive_path):
         return False
     if run(f"rm -f /tmp/{file_name_tgz}").failed:
         return False
-    if run(f"rm -rf /data/web_static/releases/{file_name}/web_static").failed:
-        return False
+    #if run(f"rm -rf /data/web_static/releases/{file_name}/web_static").failed:
+        #return False
     if run("rm -f /data/web_static/current").failed:
         return False
     if run("ln -s /data/web_static/releases/{file_name} /data/web_static/current").failed:
