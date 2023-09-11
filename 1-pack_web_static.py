@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """
-The `2-do_deploy_web_static` module supplies a function `do_pack` that generates
-a .tgz archive from the contents of the web_static folder of our AirBnB Clone v2 repo
+The `2-do_deploy_web_static` module supplies a function `do_pack`
+that generates a .tgz archive from the contents of the web_static
+folder of our AirBnB Clone v2 repo
 """
 
 
