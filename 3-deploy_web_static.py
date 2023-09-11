@@ -5,10 +5,7 @@ distributes an archive to web servers based on `2-do_deploy_web_static` module
 """
 
 
-#from __future__ import with_statement
 from fabric.api import *
-from datetime import datetime
-from os import path
 
 
 env.user = "ubuntu"
@@ -28,6 +25,6 @@ def deploy():
     ret_path = do_pack()
     if ret_path is None or ret_path.failed:
         return False
-    ret_val = (do_deploy(ret_path)
+    ret_val = do_deploy(ret_path)
     if ret_val.succeeded:
         return ret_val
