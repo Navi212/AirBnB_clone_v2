@@ -64,17 +64,19 @@ def do_deploy(archive_path):
 
     if put(f"versions/{file_name_tgz}", "/tmp/").failed:
         return False
-    if run(f"mkdir -p /data/web_static/releases/{file_name}").failed:
+    if run(f"mkdir -p /data/web_static/releases/{file_name}/").failed:
         return False
-    if run(f"tar -xvzf /tmp/{file_name_tgz} -C /data/web_static/releases/{file_name}").failed:
+    if run(f"rm -rf /data/web_static/releases/{file_name}/").failed:
         return False
-    if run(f"mv -f /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}").failed:
+    if run(f"tar -xvzf /tmp/{file_name_tgz} -C /data/web_static/releases/{file_name}/").failed:
         return False
-    if run(f"rm -f /tmp/{file_name_tgz}").failed:
+    if run(f"mv -f /data/web_static/releases/{file_name}/web_static/* /data/web_static/releases/{file_name}/").failed:
         return False
-    #if run(f"rm -rf /data/web_static/releases/{file_name}/web_static").failed:
-        #return False
-    if run("rm -f /data/web_static/current").failed:
+    if run(f"rm -rf /tmp/{file_name_tgz}").failed:
+        return False
+    if run(f"rm -rf /data/web_static/releases/{file_name}/web_static").failed:
+        return False
+    if run("rm -rf /data/web_static/current").failed:
         return False
     if run("ln -s /data/web_static/releases/{file_name} /data/web_static/current").failed:
         return False
