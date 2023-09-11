@@ -7,7 +7,6 @@
 #	If not installed, the script will install and con-
 #	figure nginx with below requirements
 
-
 configure_nginx () {
 	sudo mkdir -p /data/
 	sudo mkdir -p /data/web_static/
@@ -23,11 +22,9 @@ configure_nginx () {
 
 if command -v nginx &> /dev/null
 then
-	echo "Nginx is already installed! Just configure"
 	configure_nginx
 	sudo service nginx restart
 else
-	echo "No Nginx installed. Install and configure"
 	sudo apt-get update
 	sudo apt-get -y install nginx
 	sudo service nginx start
