@@ -15,7 +15,7 @@ def hello_hbnb():
     """
     Returns 'Hello HBNB!' when queried at '/'
     """
-    return f"Hello HBNB!"
+    return "Hello HBNB!"
 
 
 if __name__ == "__main__":

@@ -18,7 +18,7 @@ def hello_hbnb():
     """
     Returns 'Hello HBNB!' when queried at '/'
     """
-    return f"Hello HBNB!"
+    return "Hello HBNB!"
 
 
 @app.route("/hbnb", strict_slashes=False)
@@ -26,7 +26,7 @@ def hbnb():
     """
     Returns 'HBNB' when queried at '/hbnb'
     """
-    return f"HBNB"
+    return "HBNB"
 
 
 if __name__ == "__main__":
