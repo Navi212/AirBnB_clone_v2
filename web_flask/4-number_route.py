@@ -59,7 +59,7 @@ def display_num(n):
     """
     Displays “n is a number” only if n is an integer
     """
-    return "{n} is a number"
+    return f"{n} is a number"
 
 
 if __name__ == "__main__":
