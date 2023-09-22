@@ -38,7 +38,7 @@ def c_is_fun(text):
     Display “C ” followed by the value of the
     text variable. Replacing '_' with space
     """
-    return f"C {escape(text)} | text.replace('_', ' ')"
+    return f"C {%} text.replace('_', ' ')"
 
 
 if __name__ == "__main__":
