@@ -66,7 +66,7 @@ def display_num(n):
 
 
 @app.route("/number_template/<int:n>", strict_slashes=False)
-def render_temp():
+def render_temp(n):
     """
     Displays a html page only if "n" is an integer
     """
