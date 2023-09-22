@@ -18,7 +18,7 @@ def hello():
     Defines a function that display “Hello HBNB!”
     when queried at its root.
     """
-    return f"Hello HBNB!"
+    return f"<p>Hello HBNB!</p>"
 
 
 if __name__ == "__main__":
