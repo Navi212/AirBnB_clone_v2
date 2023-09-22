@@ -12,7 +12,6 @@ string 'Python ', followed by the value of the text variable
     '_' with space when queried at '/python/<text>'
 """
 from flask import Flask
-from markupsafe import escape
 
 
 app = Flask(__name__)
@@ -50,7 +49,7 @@ def py_text(text="is cool"):
     Returns 'C <value of variable passed>'
     when queried at /python/<text>
     """
-    return f"Python {escape(text) | text.replace('_', ' ')}"
+    return f"Python {text.replace('_', ' ')}"
 
 
 if __name__ == "__main__":

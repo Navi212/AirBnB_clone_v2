@@ -10,7 +10,6 @@ string 'C' followed by the value of text variable replacing
     '_' with space when queried at '/c/<text>'
 """
 from flask import Flask
-from markupsafe import escape
 
 
 app = Flask(__name__)
