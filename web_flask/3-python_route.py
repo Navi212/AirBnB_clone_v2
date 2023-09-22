@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-The `1-hbnb_route` module supply functions
+The `3-python_route` module supply functions
 that starts a Flask web application, listens on 0.0.0.0
 port 5000.
 Returns:
@@ -8,6 +8,8 @@ string 'Hello HBNB!' when queried at '/'
 string 'HBNB!' when queried at '/hbnb'
 string 'C' followed by the value of text variable replacing
     '_' with space when queried at '/c/<text>'
+string 'Python ', followed by the value of the text variable
+    '_' with space when queried at '/python/<text>'
 """
 from flask import Flask
 from markupsafe import escape
@@ -34,8 +36,20 @@ def hbnb():
 
 @app.route('/c/<text>', strict_slashes=False)
 def c_text(text):
-    """ Function called with /c/<text> route """
+    """
+    Returns 'C <value of variable passed>'
+    when queried at /c/<text>
+    """
     return f"C {text.replace('_', ' ')}"
+
+
+@app.route('/python/<text>', strict_slashes=False)
+def py_text(text="is cool"):
+    """
+    Returns 'C <value of variable passed>'
+    when queried at /python/<text>
+    """
+    return f"Python {text.replace('_', ' ')}"
 
 
 if __name__ == "__main__":

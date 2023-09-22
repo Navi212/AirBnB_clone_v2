@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-The `1-hbnb_route` module supplies a function `hello_hbnb`
+The `1-hbnb_route` module supply functions
 that starts a Flask web application, listens on 0.0.0.0
 port 5000.
 Returns:
