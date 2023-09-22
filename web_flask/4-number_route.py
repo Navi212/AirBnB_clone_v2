@@ -55,11 +55,11 @@ def py_text(text="is cool"):
 
 
 @app.route("/number/<int:n>", strict_slashes=False)
-def display_num():
+def display_num(n):
     """
     Displays “n is a number” only if n is an integer
     """
-    return f"{n} is a number"
+    return "{n} is a number"
 
 
 if __name__ == "__main__":
