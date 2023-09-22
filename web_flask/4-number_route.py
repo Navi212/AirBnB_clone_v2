@@ -13,7 +13,6 @@ string 'Python ', followed by the value of the text variable
 display “n is a number” only if n is an integer
 """
 from flask import Flask
-from markupsafe import escape
 
 
 app = Flask(__name__)
