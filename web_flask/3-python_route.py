@@ -50,7 +50,7 @@ def py_text(text="is cool"):
     Returns 'C <value of variable passed>'
     when queried at /python/<text>
     """
-    return f"Python {text.replace('_', ' ')}"
+    return f"Python {escape(text) | text.replace('_', ' ')}"
 
 
 if __name__ == "__main__":
