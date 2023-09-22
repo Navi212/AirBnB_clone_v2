@@ -32,13 +32,10 @@ def hbnb():
     return f"HBNB"
 
 
-@app.route("/c/<text>", strict_slashes=False)
-def c_is_fun(text):
-    """
-    Display “C ” followed by the value of the
-    text variable. Replacing '_' with space
-    """
-    return f"C " % text.replace('_', ' ')
+@app.route('/c/<text>', strict_slashes=False)
+def c_text(text):
+    """ Function called with /c/<text> route """
+    return 'C %s' % text.replace('_', ' ')
 
 
 if __name__ == "__main__":
